@@ -6,3 +6,5 @@ This is [Truss](https://truss.works/)' custom-built docker image for use with Ci
 
 - [pre-commit](http://pre-commit.com/)
 - [ShellCheck](https://www.shellcheck.net/)
+- [Terraform](https://www.terraform.io/) 0.13.x
+- [terraform-docs](https://github.com/segmentio/terraform-docs)
