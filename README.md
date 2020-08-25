@@ -8,3 +8,9 @@ This is [Truss](https://truss.works/)' custom-built docker image for use with Ci
 - [ShellCheck](https://www.shellcheck.net/)
 - [Terraform](https://www.terraform.io/) 0.13.x
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
+
+Additionally, this image can also be used to perform Python-related tasks as the base image comes with the following Python tools:
+
+- [pip](https://pip.pypa.io/en/stable/)
+- [pipenv](https://pipenv-fork.readthedocs.io/en/latest/)
+- [poetry](https://python-poetry.org/)
