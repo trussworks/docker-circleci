@@ -6,7 +6,6 @@ CACHE_APT=$(date '+%Y-%m-%d')
 
 # bust cache for pip when requirements.txt changes
 CACHE_PIP=$(shasum -a 256 requirements.txt | cut -f1 -d' ')
-CACHE_PIP_PACKER=$(shasum -a 256 packer/requirements.txt | cut -f1 -d' ')
 
 docker build --build-arg CACHE_APT="$CACHE_APT" \
 	     --build-arg CACHE_PIP="$CACHE_PIP" \
