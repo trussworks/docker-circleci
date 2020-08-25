@@ -1,5 +1,16 @@
 version: 2
 updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: "10:00"
+      timezone: PST8PDT
+    pull-request-branch-name:
+      separator: "-"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
   - package-ecosystem: docker
     directory: "/"
     schedule:
