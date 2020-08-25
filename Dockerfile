@@ -23,7 +23,7 @@ RUN set -ex && cd ~ \
     && rm -vf /tmp/requirements.txt
 
 # install terraform
-ARG TERRAFORM_VERSION=0.13.30
+ARG TERRAFORM_VERSION=0.13.0
 ARG TERRAFORM_SHA256SUM=9ed437560faf084c18716e289ea712c784a514bdd7f2796549c735d439dbe37
 RUN set -ex && cd ~ \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
