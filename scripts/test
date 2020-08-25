@@ -6,24 +6,10 @@ function test_latest() {
   echo "Testing ${tag} Dockerfile"
 
   docker run -it "trussworks/circleci-pre-commit:${tag}" shellcheck --version
-  docker run -it "trussworks/circleci-pre-commit:${tag}" circleci version
-  docker run -it "trussworks/circleci-pre-commit:${tag}" aws --version
+  docker run -it "trussworks/circleci-pre-commit:${tag}" pre-commit --version
 
   echo "Passed ${tag}"
 }
-
-# if doing multiple tags
-# for tag in latest; do
-#     echo "* Testing USER is properly set to 'circleci' on '$tag' tagged image"
-#     docker run -it trussworks/circleci-pre-commit:$tag bash -xc '[[ $(whoami) = circleci ]]'
-
-#     case ${tag} in
-#         latest)
-#         test_latest
-#         ;;
-# esac
-
-#done
 
 tag=latest
 echo "* Testing USER is properly set to 'circleci' on '${tag}' tagged image"
