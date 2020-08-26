@@ -8,10 +8,10 @@ This is [Truss](https://truss.works/)' custom-built docker image for use with Ci
 - [ShellCheck](https://www.shellcheck.net/)
 - [Terraform](https://www.terraform.io/) 0.13.x
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
-- [go 1.15.x]()
-- [goreleaser]()
-- [go-bindata]()
-- [AWS CLI]()
+- [go 1.15.x](https://golang.org/)
+- [goreleaser](https://goreleaser.com/go)
+- [go-bindata](https://github.com/kevinburke/go-bindata)
+- [AWS CLI](https://aws.amazon.com/cli/)
 
 Additionally, this image can also be used to perform Python-related tasks as the base image comes with the following Python tools:
 
