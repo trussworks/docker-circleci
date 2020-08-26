@@ -92,4 +92,17 @@ RUN set -ex && cd ~ \
     && aws --version \
     && rm -r awscliv2.zip awscliv2.sig aws
 
+# apt-get all the things
+# Notes:
+# - Add all apt sources first
+# - groff and less required by AWS CLI
+ARG CACHE_APT
+RUN set -ex && cd ~ \
+    && apt-get update \
+    && : Install apt packages \
+    && apt-get -qq -y install --no-install-recommends apt-transport-https less groff lsb-release \
+    && : Cleanup \
+    && apt-get clean \
+    && rm -vrf /var/lib/apt/lists/*
+
 USER circleci
