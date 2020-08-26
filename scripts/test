@@ -5,17 +5,22 @@ function test_latest() {
   tag=latest
   echo "Testing ${tag} Dockerfile"
 
-  docker run -it "trussworks/circleci-pre-commit:${tag}" shellcheck --version
-  docker run -it "trussworks/circleci-pre-commit:${tag}" pre-commit --version
-    docker run -it "trussworks/circleci-pre-commit:${tag}" terraform --version
-    docker run -it "trussworks/circleci-pre-commit:${tag}" terraform-docs --version
+  docker run -it "trussworks/circleci:${tag}" shellcheck --version
+  docker run -it "trussworks/circleci:${tag}" pre-commit --version
+  docker run -it "trussworks/circleci:${tag}" terraform --version
+  docker run -it "trussworks/circleci:${tag}" terraform-docs --version
+  docker run -it "trussworks/circleci:${tag}" aws --version
+  docker run -it "trussworks/circleci:${tag}" python --version
+  docker run -it "trussworks/circleci:${tag}" go version
+  docker run -it "trussworks/circleci:${tag}" go-bindata --version
+  docker run -it "trussworks/circleci:${tag}" goreleaser --version
 
   echo "Passed ${tag}"
 }
 
 tag=latest
 echo "* Testing USER is properly set to 'circleci' on '${tag}' tagged image"
-docker run -it trussworks/circleci-pre-commit:$tag bash -xc '[[ $(whoami) = circleci ]]'
+docker run -it trussworks/circleci:$tag bash -xc '[[ $(whoami) = circleci ]]'
 test_latest
 
 echo Passed.

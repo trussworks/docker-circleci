@@ -9,5 +9,5 @@ CACHE_PIP=$(shasum -a 256 requirements.txt | cut -f1 -d' ')
 
 docker build --build-arg CACHE_APT="$CACHE_APT" \
 	     --build-arg CACHE_PIP="$CACHE_PIP" \
-	     -t trussworks/circleci-pre-commit \
+	     -t trussworks/circleci \
 	     .

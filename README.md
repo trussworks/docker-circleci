@@ -1,13 +1,17 @@
-# circleci-pre-commit
+# docker-circleci
 
-[![Build status](https://img.shields.io/circleci/project/github/trussworks/circleci-pre-commit/master.svg)](https://circleci.com/gh/trussworks/circleci-pre-commit/tree/master)
+[![Build status](https://img.shields.io/circleci/project/github/trussworks/circleci/master.svg)](https://circleci.com/gh/trussworks/circleci/tree/master)
 
-This is [Truss](https://truss.works/)' custom-built docker image for use with CircleCI 2.x jobs to run pre-commit and validate commits. It is built off of CircleCI's Python 3.8.x convenience image with the following tools installed:
+This is [Truss](https://truss.works/)' custom-built docker image for use with CircleCI 2.x jobs. It is built off of CircleCI's Python 3.8.x convenience image with the following tools installed:
 
 - [pre-commit](http://pre-commit.com/)
 - [ShellCheck](https://www.shellcheck.net/)
 - [Terraform](https://www.terraform.io/) 0.13.x
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
+- [go 1.15.x]()
+- [goreleaser]()
+- [go-bindata]()
+- [AWS CLI]()
 
 Additionally, this image can also be used to perform Python-related tasks as the base image comes with the following Python tools:
 
