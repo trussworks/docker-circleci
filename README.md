@@ -12,6 +12,7 @@ This is [Truss](https://truss.works/)' custom-built docker image for use with Ci
 - [goreleaser](https://goreleaser.com/go)
 - [go-bindata](https://github.com/kevinburke/go-bindata)
 - [AWS CLI](https://aws.amazon.com/cli/)
+- [CircleCI CLI](https://circleci.com/docs/2.0/local-cli/)
 
 Additionally, this image can also be used to perform Python-related tasks as the base image comes with the following Python tools:
 

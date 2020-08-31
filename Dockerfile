@@ -11,7 +11,6 @@ USER root
 # may prevent others from experiencing this same problem.
 ENV GOFLAGS=-p=4
 
-
 # install pip packages
 ARG CACHE_PIP
 ADD ./requirements.txt /tmp/requirements.txt
@@ -77,6 +76,17 @@ RUN set -ex && cd ~ \
     && [ $(sha256sum terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 | cut -f1 -d' ') = ${TERRAFORM_DOCS_SHA256SUM} ] \
     && chmod 755 terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 \
     && mv terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 /usr/local/bin/terraform-docs
+
+# install circleci cli
+ARG CIRCLECI_CLI_VERSION=0.1.9431
+ARG CIRCLECI_CLI_SHA256SUM=e231533d494836cc21089f79a57a2406ec4543eee1a7ecc996281de79634cbca
+RUN set -ex && cd ~ \
+    && curl -sSLO https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CIRCLECI_CLI_VERSION}/circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
+    && [ $(sha256sum circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz | cut -f1 -d' ') = ${CIRCLECI_CLI_SHA256SUM} ] \
+    && tar xzf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
+    && mv circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64/circleci /usr/local/bin \
+    && chmod 755 /usr/local/bin/circleci \
+    && rm -vrf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64 circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz
 
 # install awscliv2, disable default pager (less)
 ENV AWS_PAGER=""
