@@ -14,7 +14,7 @@ function test_latest() {
   docker run -it "trussworks/circleci:${tag}" go version
   docker run -it "trussworks/circleci:${tag}" go-bindata --version
   docker run -it "trussworks/circleci:${tag}" goreleaser --version
-  docker run -it "trussworks/circleci:${tag}" circleci --version
+  docker run -it "trussworks/circleci:${tag}" circleci version
 
   echo "Passed ${tag}"
 }
