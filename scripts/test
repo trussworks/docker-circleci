@@ -9,6 +9,7 @@ function test_latest() {
   docker run -it "trussworks/circleci:${tag}" pre-commit --version
   docker run -it "trussworks/circleci:${tag}" terraform --version
   docker run -it "trussworks/circleci:${tag}" terraform-docs --version
+  docker run -it "trussworks/circleci:${tag}" tfsec --version
   docker run -it "trussworks/circleci:${tag}" aws --version
   docker run -it "trussworks/circleci:${tag}" python --version
   docker run -it "trussworks/circleci:${tag}" go version
