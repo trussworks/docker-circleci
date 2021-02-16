@@ -125,4 +125,9 @@ RUN set -ex && cd ~ \
     && apt-get clean \
     && rm -vrf /var/lib/apt/lists/*
 
+# Adding a directory to try and support GitHub actions
+RUN mkdir /__w \
+    && chown circleci /__w \
+    && chmod 755 /__w
+
 USER circleci
