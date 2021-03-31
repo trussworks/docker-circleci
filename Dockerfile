@@ -38,8 +38,8 @@ RUN set -ex && cd ~ \
     && mv go-bindata-linux-amd64 /usr/local/bin/go-bindata
 
 #install goreleaser
-ARG GORELEASER_VERSION=0.142.0
-ARG GORELEASER_SHA256SUM=eb61a73f5b0947abb8d85074b7bcfd06460f869f3c5708c73800bd57668e55a2
+ARG GORELEASER_VERSION=0.162.0
+ARG GORELEASER_SHA256SUM=4b7d2f1e59ead8047fcef795d66236ff6f8cfe7302c1ff8fb31bd360a3c6f32e
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_x86_64.tar.gz \
     && [ $(sha256sum goreleaser_Linux_x86_64.tar.gz | cut -f1 -d' ') = ${GORELEASER_SHA256SUM} ] \
