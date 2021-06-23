@@ -60,7 +60,7 @@ RUN set -ex && cd ~ \
     && rm -vrf shellcheck-v${SHELLCHECK_VERSION} shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
 
 # install terraform
-ARG TERRAFORM_VERSION=0.15.1
+ARG TERRAFORM_VERSION=0.15.2
 COPY sigs/hashicorp_pgp.key /tmp/hashicorp_pgp.key
 RUN gpg --import /tmp/hashicorp_pgp.key
 RUN set -ex && cd ~ \
