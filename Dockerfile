@@ -81,14 +81,16 @@ RUN set -ex && cd ~ \
     && mv terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 /usr/local/bin/terraform-docs
 
 # install tfsec
-ARG TFSEC_VERSION=0.38.3
-# note: tfsec does not provide the SHASUM with the release, so this is obtained manually.
-ARG TFSEC_SHA256SUM=8444cf04c44bc4aa68201e7b5d68a943ba3eff7e8f42fbee9f28961204a7ebd8
+ARG TFSEC_VERSION=0.40.6
+COPY sigs/tfsec_pgp.key /tmp/tfsec_pgp.key
+RUN gpg --import /tmp/tfsec_pgp.key
 RUN set -ex && cd ~ \
   && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64 \
-  && [ $(sha256sum tfsec-linux-amd64 | cut -f1 -d' ') = ${TFSEC_SHA256SUM} ] \
+  && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig \
+  && gpg --verify tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig tfsec-linux-amd64 \
   && chmod 755 tfsec-linux-amd64 \
-  && mv tfsec-linux-amd64 /usr/local/bin/tfsec
+  && mv tfsec-linux-amd64 /usr/local/bin/tfsec \
+  && rm -vf tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig
 
 # install circleci cli
 ARG CIRCLECI_CLI_VERSION=0.1.9431
