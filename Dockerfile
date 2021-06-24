@@ -1,4 +1,3 @@
-
 # CircleCI docker image to run within
 FROM circleci/python:3.9.5
 # Base image uses "circleci", to avoid using `sudo` run as root user
@@ -49,8 +48,8 @@ RUN set -ex && cd ~ \
     && rm -rf goreleaser_Linux_x86_64
 
 # install shellcheck
-ARG SHELLCHECK_VERSION=0.7.1
-ARG SHELLCHECK_SHA256SUM=64f17152d96d7ec261ad3086ed42d18232fcb65148b44571b564d688269d36c8
+ARG SHELLCHECK_VERSION=0.7.2
+ARG SHELLCHECK_SHA256SUM=70423609f27b504d6c0c47e340f33652aea975e45f312324f2dbf91c95a3b188
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz \
     && [ $(sha256sum shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz | cut -f1 -d' ') = ${SHELLCHECK_SHA256SUM} ] \
