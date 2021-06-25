@@ -44,6 +44,7 @@ RUN set -ex && cd ~ \
     && [ $(sha256sum goreleaser_Linux_x86_64.tar.gz | cut -f1 -d' ') = ${GORELEASER_SHA256SUM} ] \
     && mkdir -p goreleaser_Linux_x86_64 \
     && tar xf goreleaser_Linux_x86_64.tar.gz -C goreleaser_Linux_x86_64 \
+    && chown root:root goreleaser_Linux_x86_64/goreleaser \
     && mv goreleaser_Linux_x86_64/goreleaser /usr/local/bin \
     && rm -vrf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
 
@@ -104,6 +105,7 @@ RUN set -ex && cd ~ \
     && tar xzf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
     && mv circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64/circleci /usr/local/bin \
     && chmod 755 /usr/local/bin/circleci \
+    && chown root:root /usr/local/bin/circleci \
     && rm -vrf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64 circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz
 
 # install awscliv2, disable default pager (less)
