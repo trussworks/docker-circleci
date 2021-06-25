@@ -25,7 +25,7 @@ RUN set -ex && cd ~ \
     && [ $(sha256sum go${GO_VERSION}.linux-amd64.tar.gz | cut -f1 -d' ') = ${GO_SHA256SUM} ] \
     && tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz \
     && ln -s /usr/local/go/bin/* /usr/local/bin \
-    && rm -v go${GO_VERSION}.linux-amd64.tar.gz
+    && rm -vf go${GO_VERSION}.linux-amd64.tar.gz
 
 # install go-bindata
 ARG GO_BINDATA_VERSION=3.21.0
@@ -45,7 +45,7 @@ RUN set -ex && cd ~ \
     && mkdir -p goreleaser_Linux_x86_64 \
     && tar xf goreleaser_Linux_x86_64.tar.gz -C goreleaser_Linux_x86_64 \
     && mv goreleaser_Linux_x86_64/goreleaser /usr/local/bin \
-    && rm -rf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
+    && rm -vrf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
 
 # install shellcheck
 ARG SHELLCHECK_VERSION=0.7.2
@@ -81,7 +81,7 @@ RUN set -ex && cd ~ \
     && tar -C terraform-docs -xzf terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && chown root:root terraform-docs/terraform-docs \
     && mv terraform-docs/terraform-docs /usr/local/bin \
-    && rm -rf terraform-docs terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz
+    && rm -vrf terraform-docs terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz
 
 # install tfsec
 ARG TFSEC_VERSION=0.40.6
@@ -118,7 +118,7 @@ RUN set -ex && cd ~ \
     && unzip awscliv2.zip \
     && ./aws/install --update \
     && aws --version \
-    && rm -r awscliv2.zip awscliv2.sig aws
+    && rm -vrf awscliv2.zip awscliv2.sig aws
 
 # apt-get all the things
 # Notes:
