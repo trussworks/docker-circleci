@@ -10,6 +10,11 @@ USER root
 # may prevent others from experiencing this same problem.
 ENV GOFLAGS=-p=4
 
+# Import signing keys
+COPY signing_keys /tmp/signing_keys
+RUN set -ex && cd ~ \
+    && for key in /tmp/signing_keys/*.pub; do gpg --import $key; done
+
 # install pip packages
 ARG CACHE_PIP
 ADD ./requirements.txt /tmp/requirements.txt
@@ -61,9 +66,7 @@ RUN set -ex && cd ~ \
 
 # install terraform
 ARG TERRAFORM_VERSION=1.0.1
-COPY sigs/hashicorp_pgp.key /tmp/hashicorp_pgp.key
 RUN set -ex && cd ~ \
-    && gpg --import /tmp/hashicorp_pgp.key \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS \
@@ -86,9 +89,7 @@ RUN set -ex && cd ~ \
 
 # install tfsec
 ARG TFSEC_VERSION=0.40.6
-COPY sigs/tfsec_pgp.key /tmp/tfsec_pgp.key
 RUN set -ex && cd ~ \
-  && gpg --import /tmp/tfsec_pgp.key \
   && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64 \
   && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig \
   && gpg --verify tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig tfsec-linux-amd64 \
@@ -111,9 +112,7 @@ RUN set -ex && cd ~ \
 # install awscliv2, disable default pager (less)
 ENV AWS_PAGER=""
 ARG AWSCLI_VERSION=2.2.13
-COPY sigs/awscliv2_pgp.key /tmp/awscliv2_pgp.key
 RUN set -ex && cd ~ \
-    && gpg --import /tmp/awscliv2_pgp.key \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o awscliv2.zip \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip.sig" -o awscliv2.sig \
     && gpg --verify awscliv2.sig awscliv2.zip \
