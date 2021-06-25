@@ -1,6 +1,7 @@
 # CircleCI docker image to run within
 FROM circleci/python:3.9.5
-# Base image uses "circleci", to avoid using `sudo` run as root user
+# Base image uses "circleci", to avoid using `sudo` run as root user and reset
+# at the end.
 USER root
 
 # Golang env flags that limit parallel execution
@@ -134,4 +135,6 @@ RUN set -ex && cd ~ \
     && apt-get clean \
     && rm -vrf /var/lib/apt/lists/*
 
+
+# Finally, reset to expected user.
 USER circleci
