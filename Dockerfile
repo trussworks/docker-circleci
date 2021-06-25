@@ -45,7 +45,7 @@ RUN set -ex && cd ~ \
     && mkdir -p goreleaser_Linux_x86_64 \
     && tar xf goreleaser_Linux_x86_64.tar.gz -C goreleaser_Linux_x86_64 \
     && mv goreleaser_Linux_x86_64/goreleaser /usr/local/bin \
-    && rm -rf goreleaser_Linux_x86_64
+    && rm -rf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
 
 # install shellcheck
 ARG SHELLCHECK_VERSION=0.7.2
