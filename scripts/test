@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -exu -o pipefail
+set -ex -o pipefail
 
 docker_args=()
 if [[ $(uname -m) = arm64 ]]; then
