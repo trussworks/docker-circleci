@@ -24,8 +24,8 @@ RUN set -ex && cd ~ \
     && rm -vf /tmp/requirements.txt
 
 # install go
-ARG GO_VERSION=1.15
-ARG GO_SHA256SUM=2d75848ac606061efe52a8068d0e647b35ce487a15bb52272c427df485193602
+ARG GO_VERSION=1.17
+ARG GO_SHA256SUM=6bf89fc4f5ad763871cf7eac80a2d594492de7a818303283f1366a7f6a30372d
 RUN set -ex && cd ~ \
     && curl -sSLO https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
     && [ $(sha256sum go${GO_VERSION}.linux-amd64.tar.gz | cut -f1 -d' ') = ${GO_SHA256SUM} ] \
@@ -33,18 +33,9 @@ RUN set -ex && cd ~ \
     && ln -s /usr/local/go/bin/* /usr/local/bin \
     && rm -vf go${GO_VERSION}.linux-amd64.tar.gz
 
-# install go-bindata
-ARG GO_BINDATA_VERSION=3.21.0
-ARG GO_BINDATA_SHA256SUM=87fc875f5beb928c33ae321147ed9b1ca52e15afe5606500f59eaec6206eeab5
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/kevinburke/go-bindata/releases/download/v${GO_BINDATA_VERSION}/go-bindata-linux-amd64 \
-    && [ $(sha256sum go-bindata-linux-amd64 | cut -f1 -d' ') = ${GO_BINDATA_SHA256SUM} ] \
-    && chmod 755 go-bindata-linux-amd64 \
-    && mv go-bindata-linux-amd64 /usr/local/bin/go-bindata
-
 #install goreleaser
-ARG GORELEASER_VERSION=0.162.0
-ARG GORELEASER_SHA256SUM=4b7d2f1e59ead8047fcef795d66236ff6f8cfe7302c1ff8fb31bd360a3c6f32e
+ARG GORELEASER_VERSION=0.175.0
+ARG GORELEASER_SHA256SUM=f60d1d7c6bec78a6b8613b6e07c4259c81c5d04d263d420bc3e97b507145e065
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_x86_64.tar.gz \
     && [ $(sha256sum goreleaser_Linux_x86_64.tar.gz | cut -f1 -d' ') = ${GORELEASER_SHA256SUM} ] \
@@ -66,7 +57,7 @@ RUN set -ex && cd ~ \
     && rm -vrf shellcheck-v${SHELLCHECK_VERSION} shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
 
 # install terraform
-ARG TERRAFORM_VERSION=1.0.1
+ARG TERRAFORM_VERSION=1.0.5
 RUN set -ex && cd ~ \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig \
@@ -77,8 +68,8 @@ RUN set -ex && cd ~ \
     && rm -vf terraform_${TERRAFORM_VERSION}_linux_amd64.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig
 
 # install terraform-docs
-ARG TERRAFORM_DOCS_VERSION=0.14.1
-ARG TERRAFORM_DOCS_SHA256SUM=f0a46b13c126f06eba44178f901bb7b6b5f61a8b89e07a88988c6f45e5fcce19
+ARG TERRAFORM_DOCS_VERSION=0.15.0
+ARG TERRAFORM_DOCS_SHA256SUM=e0b399d9dc2eb97853a7e12f1ae678e7160cae4c811646ce70169a8d611f6cf9
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/segmentio/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && [ $(sha256sum terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz | cut -f1 -d' ') = ${TERRAFORM_DOCS_SHA256SUM} ] \
@@ -89,7 +80,7 @@ RUN set -ex && cd ~ \
     && rm -vrf terraform-docs terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz
 
 # install tfsec
-ARG TFSEC_VERSION=0.40.6
+ARG TFSEC_VERSION=0.58.4
 RUN set -ex && cd ~ \
   && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64 \
   && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig \
@@ -99,8 +90,8 @@ RUN set -ex && cd ~ \
   && rm -vf tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig
 
 # install circleci cli
-ARG CIRCLECI_CLI_VERSION=0.1.9431
-ARG CIRCLECI_CLI_SHA256SUM=e231533d494836cc21089f79a57a2406ec4543eee1a7ecc996281de79634cbca
+ARG CIRCLECI_CLI_VERSION=0.1.15848
+ARG CIRCLECI_CLI_SHA256SUM=28b01acb8e456cb652ed944f0302eadbf5543c9479640464c0993fb9f2cdf177
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CIRCLECI_CLI_VERSION}/circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
     && [ $(sha256sum circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz | cut -f1 -d' ') = ${CIRCLECI_CLI_SHA256SUM} ] \
@@ -112,7 +103,7 @@ RUN set -ex && cd ~ \
 
 # install awscliv2, disable default pager (less)
 ENV AWS_PAGER=""
-ARG AWSCLI_VERSION=2.2.13
+ARG AWSCLI_VERSION=2.2.30
 RUN set -ex && cd ~ \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o awscliv2.zip \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip.sig" -o awscliv2.sig \
