@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -exu -o pipefail
 
+docker_args=()
 if [[ $(uname -m) = arm64 ]]; then
   docker_args=(--platform linux/amd64)
 fi
