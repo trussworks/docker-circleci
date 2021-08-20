@@ -1,6 +1,6 @@
 # docker-circleci
 
-[![CircleCI](https://circleci.com/gh/trussworks/docker-circleci/tree/master.svg?style=svg)](https://circleci.com/gh/trussworks/docker-circleci/tree/master)
+[![CircleCI](https://circleci.com/gh/trussworks/docker-circleci.svg?style=svg)](https://circleci.com/gh/trussworks/docker-circleci)
 
 This is [Truss](https://truss.works/)' custom-built docker image for use with CircleCI 2.x jobs. It is built off of CircleCI's Python 3.8.x convenience image with the following tools installed:
 
