@@ -1,5 +1,5 @@
 # CircleCI docker image to run within
-FROM circleci/python:3.10.0
+FROM circleci/python:3.10.1
 # Base image uses "circleci", to avoid using `sudo` run as root user and reset
 # at the end.
 USER root
