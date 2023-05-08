@@ -2,10 +2,6 @@ FROM python:3.11-slim-bullseye
 
 RUN apt update && apt install gnupg curl unzip -y
 
-# Golang env flags that limit parallel execution
-# The golang default is to use the max CPUs or default to 36.
-ENV GOFLAGS=-p=4
-
 # Import signing keys
 COPY signing_keys /tmp/signing_keys
 RUN set -ex && cd ~ \
@@ -17,28 +13,6 @@ ADD ./requirements.txt /tmp/requirements.txt
 RUN set -ex && cd ~ \
     && pip install -r /tmp/requirements.txt --no-cache-dir --disable-pip-version-check \
     && rm -vf /tmp/requirements.txt
-
-# install go
-ARG GO_VERSION=1.20.4
-ARG GO_SHA256SUM=698ef3243972a51ddb4028e4a1ac63dc6d60821bf18e59a807e051fee0a385bd
-RUN set -ex && cd ~ \
-    && curl -sSLO https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
-    && [ $(sha256sum go${GO_VERSION}.linux-amd64.tar.gz | cut -f1 -d' ') = ${GO_SHA256SUM} ] \
-    && tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz \
-    && ln -s /usr/local/go/bin/* /usr/local/bin \
-    && rm -vf go${GO_VERSION}.linux-amd64.tar.gz
-
-#install goreleaser
-ARG GORELEASER_VERSION=1.18.2
-ARG GORELEASER_SHA256SUM=811e0c63e347f78f3c8612a19ca8eeb564eb45f0265ce3f38aec39c8fdbcfa10
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_x86_64.tar.gz \
-    && [ $(sha256sum goreleaser_Linux_x86_64.tar.gz | cut -f1 -d' ') = ${GORELEASER_SHA256SUM} ] \
-    && mkdir -p goreleaser_Linux_x86_64 \
-    && tar xf goreleaser_Linux_x86_64.tar.gz -C goreleaser_Linux_x86_64 \
-    && chown root:root goreleaser_Linux_x86_64/goreleaser \
-    && mv goreleaser_Linux_x86_64/goreleaser /usr/local/bin \
-    && rm -vrf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
 
 # install terraform
 ARG TERRAFORM_VERSION=1.4.6
@@ -72,18 +46,6 @@ RUN set -ex && cd ~ \
     && chmod 755 tfsec-linux-amd64 \
     && mv tfsec-linux-amd64 /usr/local/bin/tfsec \
     && rm -vf tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig
-
-# install circleci cli
-ARG CIRCLECI_CLI_VERSION=0.1.15848
-ARG CIRCLECI_CLI_SHA256SUM=28b01acb8e456cb652ed944f0302eadbf5543c9479640464c0993fb9f2cdf177
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CIRCLECI_CLI_VERSION}/circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
-    && [ $(sha256sum circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz | cut -f1 -d' ') = ${CIRCLECI_CLI_SHA256SUM} ] \
-    && tar xzf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
-    && mv circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64/circleci /usr/local/bin \
-    && chmod 755 /usr/local/bin/circleci \
-    && chown root:root /usr/local/bin/circleci \
-    && rm -vrf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64 circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz
 
 # install awscliv2, disable default pager (less)
 ENV AWS_PAGER=""
