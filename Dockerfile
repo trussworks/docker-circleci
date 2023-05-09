@@ -1,15 +1,6 @@
-# CircleCI docker image to run within
-FROM circleci/python:3.10.1
-# Base image uses "circleci", to avoid using `sudo` run as root user and reset
-# at the end.
-USER root
+FROM python:3.11-slim-bullseye
 
-# Golang env flags that limit parallel execution
-# The golang default is to use the max CPUs or default to 36.
-# In CircleCI 2.0 the max CPUs is 2 but golang can't get this from the environment so it defaults to 36
-# This can cause build flakiness for larger projects. Setting a value here that can be overridden during execution
-# may prevent others from experiencing this same problem.
-ENV GOFLAGS=-p=4
+RUN apt update && apt install gnupg curl unzip -y
 
 # Import signing keys
 COPY signing_keys /tmp/signing_keys
@@ -23,41 +14,8 @@ RUN set -ex && cd ~ \
     && pip install -r /tmp/requirements.txt --no-cache-dir --disable-pip-version-check \
     && rm -vf /tmp/requirements.txt
 
-# install go
-ARG GO_VERSION=1.18.4
-ARG GO_SHA256SUM=c9b099b68d93f5c5c8a8844a89f8db07eaa58270e3a1e01804f17f4cf8df02f5
-RUN set -ex && cd ~ \
-    && curl -sSLO https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
-    && [ $(sha256sum go${GO_VERSION}.linux-amd64.tar.gz | cut -f1 -d' ') = ${GO_SHA256SUM} ] \
-    && tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz \
-    && ln -s /usr/local/go/bin/* /usr/local/bin \
-    && rm -vf go${GO_VERSION}.linux-amd64.tar.gz
-
-#install goreleaser
-ARG GORELEASER_VERSION=1.10.2
-ARG GORELEASER_SHA256SUM=df5607bdd648bf44eeb1af9bb03f65fd04427b55164d2eb07d6a58baa9c7ad66
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_x86_64.tar.gz \
-    && [ $(sha256sum goreleaser_Linux_x86_64.tar.gz | cut -f1 -d' ') = ${GORELEASER_SHA256SUM} ] \
-    && mkdir -p goreleaser_Linux_x86_64 \
-    && tar xf goreleaser_Linux_x86_64.tar.gz -C goreleaser_Linux_x86_64 \
-    && chown root:root goreleaser_Linux_x86_64/goreleaser \
-    && mv goreleaser_Linux_x86_64/goreleaser /usr/local/bin \
-    && rm -vrf goreleaser_Linux_x86_64 goreleaser_Linux_x86_64.tar.gz
-
-# install shellcheck
-ARG SHELLCHECK_VERSION=0.7.2
-ARG SHELLCHECK_SHA256SUM=70423609f27b504d6c0c47e340f33652aea975e45f312324f2dbf91c95a3b188
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz \
-    && [ $(sha256sum shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz | cut -f1 -d' ') = ${SHELLCHECK_SHA256SUM} ] \
-    && tar xvfa shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz \
-    && mv shellcheck-v${SHELLCHECK_VERSION}/shellcheck /usr/local/bin \
-    && chown root:root /usr/local/bin/shellcheck \
-    && rm -vrf shellcheck-v${SHELLCHECK_VERSION} shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
-
 # install terraform
-ARG TERRAFORM_VERSION=1.2.5
+ARG TERRAFORM_VERSION=1.4.6
 RUN set -ex && cd ~ \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && curl -sSLO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_SHA256SUMS.sig \
@@ -71,7 +29,7 @@ RUN set -ex && cd ~ \
 ARG TERRAFORM_DOCS_VERSION=0.16.0
 ARG TERRAFORM_DOCS_SHA256SUM=328c16cd6552b3b5c4686b8d945a2e2e18d2b8145b6b66129cd5491840010182
 RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/segmentio/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
+    && curl -sSLO https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
     && [ $(sha256sum terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz | cut -f1 -d' ') = ${TERRAFORM_DOCS_SHA256SUM} ] \
     && mkdir terraform-docs \
     && tar -C terraform-docs -xzf terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz \
@@ -80,7 +38,7 @@ RUN set -ex && cd ~ \
     && rm -vrf terraform-docs terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz
 
 # install tfsec
-ARG TFSEC_VERSION=1.26.3
+ARG TFSEC_VERSION=1.28.1
 RUN set -ex && cd ~ \
     && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64 \
     && curl -sSLO https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig \
@@ -89,21 +47,9 @@ RUN set -ex && cd ~ \
     && mv tfsec-linux-amd64 /usr/local/bin/tfsec \
     && rm -vf tfsec-linux-amd64.D66B222A3EA4C25D5D1A097FC34ACEFB46EC39CE.sig
 
-# install circleci cli
-ARG CIRCLECI_CLI_VERSION=0.1.15848
-ARG CIRCLECI_CLI_SHA256SUM=28b01acb8e456cb652ed944f0302eadbf5543c9479640464c0993fb9f2cdf177
-RUN set -ex && cd ~ \
-    && curl -sSLO https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CIRCLECI_CLI_VERSION}/circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
-    && [ $(sha256sum circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz | cut -f1 -d' ') = ${CIRCLECI_CLI_SHA256SUM} ] \
-    && tar xzf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz \
-    && mv circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64/circleci /usr/local/bin \
-    && chmod 755 /usr/local/bin/circleci \
-    && chown root:root /usr/local/bin/circleci \
-    && rm -vrf circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64 circleci-cli_${CIRCLECI_CLI_VERSION}_linux_amd64.tar.gz
-
 # install awscliv2, disable default pager (less)
 ENV AWS_PAGER=""
-ARG AWSCLI_VERSION=2.7.18
+ARG AWSCLI_VERSION=2.11.18
 RUN set -ex && cd ~ \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o awscliv2.zip \
     && curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip.sig" -o awscliv2.sig \
@@ -125,7 +71,3 @@ RUN set -ex && cd ~ \
     && : Cleanup \
     && apt-get clean \
     && rm -vrf /var/lib/apt/lists/*
-
-
-# Finally, reset to expected user.
-USER circleci

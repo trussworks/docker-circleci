@@ -1,0 +1,7 @@
+.vscode
+.github
+.markdownlintrc
+.pre-commit-config.yaml
+License
+Makefile
+*.md
