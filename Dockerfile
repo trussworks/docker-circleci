@@ -1,6 +1,6 @@
 FROM python:3.11-slim-bullseye
 
-RUN apt update && apt dist-upgrade -y && apt install gnupg curl unzip git -y
+RUN apt update && apt dist-upgrade -y && apt install gnupg curl unzip git shellcheck -y
 
 # Import signing keys
 COPY signing_keys /tmp/signing_keys
